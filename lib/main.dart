@@ -1,4 +1,6 @@
+import 'package:dev_santara/page/home.dart';
 import 'package:dev_santara/page/onboarding1.dart';
+import 'package:dev_santara/page/register.dart';
 import 'package:dev_santara/page/splash_page.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +19,8 @@ class MyApp extends StatelessWidget {
       routes: {
           '/': (context) => const SplashPage(),
           '/onboarding1': (context) => const OnboardingPage(),
+          '/Register': (context) => const Register(),
+          '/home': (context) => const Home(),
         },
     );
 
