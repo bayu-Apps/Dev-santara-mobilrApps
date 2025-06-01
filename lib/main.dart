@@ -1,5 +1,6 @@
 import 'package:dev_santara/cubit/page_cubit.dart';
-import 'package:dev_santara/page/home.dart';
+import 'package:dev_santara/page/home/project/landingpage.dart';
+import 'package:dev_santara/page/main_page.dart';
 import 'package:dev_santara/page/onboarding1.dart';
 import 'package:dev_santara/page/register.dart';
 import 'package:dev_santara/page/splash_page.dart';
@@ -13,7 +14,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -28,12 +29,10 @@ class MyApp extends StatelessWidget {
           '/': (context) => const SplashPage(),
           '/onboarding1': (context) => const OnboardingPage(),
           '/Register': (context) => const Register(),
-          '/home': (context) => const Home(),
+          '/home': (context) => const MainPage(),
         },
       ),
     );
-
-    
   }
 }
 

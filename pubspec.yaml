@@ -37,10 +37,19 @@ dependencies:
   google_fonts: ^6.1.0
   flutter_svg: ^2.0.7
   flutter_bloc: ^9.0.0
+  url_launcher: ^6.3.1
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/LogoAplikasi.png"
+  adaptive_icon_foreground: "assets/LogoAplikasi.png"
+  adaptive_icon_background: "#00000000"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -64,6 +73,7 @@ flutter:
   assets:
     - assets/
     - assets/icon/
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

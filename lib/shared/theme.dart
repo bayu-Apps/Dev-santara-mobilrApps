@@ -5,7 +5,7 @@ double DefaultMargin = 24.0;
 double DefaultRadius = 17.0;
 
 
-Color KPrimaryColor= Color(0xff5C40CC);
+Color KPrimaryColor= Color(0xff89BBF4);
 Color KBlackColor = Color(0xff1F1449);
 Color KWhitecoloer = Color(0xffFFFFFF);
 Color KGreyColor = Color(0xff9698A9);

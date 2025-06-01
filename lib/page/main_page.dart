@@ -1,61 +1,47 @@
 import 'package:dev_santara/cubit/page_cubit.dart';
 import 'package:dev_santara/page/home.dart';
 import 'package:dev_santara/page/quiz_page.dart';
-import 'package:dev_santara/page/setting_page.dart';
 import 'package:dev_santara/widget/custom_button_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../shared/theme.dart';
 
 class MainPage extends StatelessWidget {
-// ignore: non_constant_identifier_names
-  Widget BuildContent(int currentIndex) {
+  const MainPage({super.key});
+
+  Widget buildContent(int currentIndex) {
     switch (currentIndex) {
       case 0:
-        return Home();
-        case 1:
-        return QuizPage();
-        case 2:
-        return SettingPage();
+        return const Home();
+      case 1:
+        return const QuizPage();
       default:
-      return Home();;
+        return const Home();
     }
   }
-
-  const MainPage({super.key});
 
   Widget customButtonNavigation() {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-        width: double.infinity,
-        height: 60,
-        margin: EdgeInsets.only(
-          bottom: 0.5,
-          left: DefaultMargin,
-          right: DefaultMargin,
-        ),
+        margin: const EdgeInsets.only(bottom: 20, left: 16, right: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
-            color: KWhitecoloer, borderRadius: BorderRadius.circular(18)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 20,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomButtonNavigationItem(
-              index: 0,
-              imageUrl: 'assets/icon_home.png',
-            ),
-            CustomButtonNavigationItem(
-              index: 1,
-              imageUrl: 'assets/icon_booking.png',
-            ),
-            CustomButtonNavigationItem(
-              index: 2,
-              imageUrl: 'assets/icon_card.png',
-            ),
-            CustomButtonNavigationItem(
-              index: 3,
-              imageUrl: 'assets/icon_settings.png',
-            ),
+            CustomButtonNavigationItem(index: 0, icon: Icons.home, label: 'Home'),
+            CustomButtonNavigationItem(index: 1, icon: Icons.quiz, label: 'Quiz'),
           ],
         ),
       ),
@@ -68,9 +54,10 @@ class MainPage extends StatelessWidget {
       builder: (context, currentIndex) {
         return Scaffold(
           backgroundColor: KBackgroundColor,
+          resizeToAvoidBottomInset: false,
           body: Stack(
             children: [
-              BuildContent(currentIndex),
+              buildContent(currentIndex),
               customButtonNavigation(),
             ],
           ),
