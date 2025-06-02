@@ -7,7 +7,7 @@ class Crudlaravel11 extends StatelessWidget {
 
   void _launchYoutube() async {
     final Uri url = Uri.parse('https://www.youtube.com/watch?v=g1GxKD1jsXw&ab_channel=HariAspriyono');
-    if (await canLaunchUrl(url)) {
+    if (!await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
       throw "Gagal Memuat Video";

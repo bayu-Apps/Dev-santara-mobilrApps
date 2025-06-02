@@ -277,6 +277,168 @@ final Map<String, List<Question>> questionsByCategory = {
     ),
   ],
 
+   // Pertanyaan Laravel
+  'LARAVEL': [
+    Question(
+      question: 'Laravel adalah framework untuk bahasa pemrograman?',
+      options: ['PHP', 'JavaScript', 'Python', 'Ruby'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Perintah untuk membuat project Laravel baru menggunakan Composer adalah?',
+      options: ['composer create-project laravel/laravel nama_project', 'npm init laravel', 'laravel new nama_project', 'php artisan new nama_project'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Fungsi dari artisan di Laravel adalah?',
+      options: ['CLI tools untuk menjalankan perintah Laravel', 'Database management', 'Template engine', 'HTTP routing'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'File konfigurasi database di Laravel terletak pada?',
+      options: ['.env', 'config/app.php', 'routes/web.php', 'database/migrations'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Untuk menjalankan migration database di Laravel menggunakan perintah?',
+      options: ['php artisan migrate', 'php artisan db:migrate', 'composer migrate', 'php migrate'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Fitur Laravel yang digunakan untuk membuat API adalah?',
+      options: ['Laravel Sanctum', 'Laravel Mix', 'Laravel Breeze', 'Laravel Nova'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Fungsi route di Laravel adalah?',
+      options: ['Menentukan URL dan aksi yang dijalankan', 'Menghubungkan ke database', 'Membuat view', 'Membuat migration'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Untuk menjalankan server development di Laravel digunakan perintah?',
+      options: ['php artisan serve', 'php artisan run', 'php serve', 'composer serve'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Template engine yang digunakan Laravel adalah?',
+      options: ['Blade', 'Twig', 'Smarty', 'Handlebars'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Fitur Eloquent di Laravel digunakan untuk?',
+      options: ['ORM (Object Relational Mapping)', 'Routing', 'Authentication', 'Caching'],
+      correctIndex: 0,
+    ),
+  ],
+
+  // Pertanyaan React
+  'REACT': [
+    Question(
+      question: 'React dikembangkan oleh?',
+      options: ['Facebook', 'Google', 'Microsoft', 'Twitter'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'React digunakan untuk membuat?',
+      options: ['User Interface', 'Backend API', 'Database', 'Server'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'React menggunakan konsep apa untuk membangun UI?',
+      options: ['Component', 'Module', 'Class', 'Function'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'JSX pada React adalah?',
+      options: ['Sintaks mirip HTML di dalam JavaScript', 'Library untuk styling', 'Fungsi untuk state management', 'Tool untuk routing'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'State di React digunakan untuk?',
+      options: ['Menyimpan data dinamis dalam komponen', 'Menyimpan data statis', 'Membuat API request', 'Mendeklarasikan fungsi'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Hook React untuk menjalankan efek samping adalah?',
+      options: ['useEffect', 'useState', 'useRef', 'useContext'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Bagaimana cara membuat komponen fungsi di React?',
+      options: ['function NamaKomponen() { return <div></div>; }', 'class NamaKomponen {}', 'var NamaKomponen = () => {}', 'semua benar'],
+      correctIndex: 3,
+    ),
+    Question(
+      question: 'React menggunakan Virtual DOM untuk?',
+      options: ['Meningkatkan performa rendering UI', 'Mengelola database', 'Routing halaman', 'Membuat API'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Untuk mengirim data dari komponen induk ke anak di React menggunakan?',
+      options: ['Props', 'State', 'Context', 'Hooks'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Library populer yang sering dipakai untuk routing di React adalah?',
+      options: ['React Router', 'React Navigation', 'React Link', 'React Route'],
+      correctIndex: 0,
+    ),
+  ],
+
+  // Pertanyaan Next.js
+  'NEXT JS': [
+    Question(
+      question: 'Next.js adalah framework berbasis?',
+      options: ['React', 'Vue', 'Angular', 'Svelte'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Fitur utama Next.js untuk SEO adalah?',
+      options: ['Server-Side Rendering (SSR)', 'Client-Side Rendering (CSR)', 'Static Site Generation (SSG)', 'Hydration'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'File untuk membuat halaman di Next.js berada di folder?',
+      options: ['pages', 'components', 'public', 'src'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Fungsi getStaticProps di Next.js digunakan untuk?',
+      options: ['Mendapatkan data secara statis saat build time', 'Mendapatkan data secara dinamis saat runtime', 'Mengatur routing halaman', 'Mengatur state komponen'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Fungsi getServerSideProps digunakan untuk?',
+      options: ['Mengambil data saat request server', 'Membuat komponen', 'Mengatur state', 'Routing halaman'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Next.js menggunakan bahasa pemrograman?',
+      options: ['JavaScript dan TypeScript', 'PHP', 'Python', 'Ruby'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Folder public di Next.js berfungsi untuk?',
+      options: ['Menyimpan aset statis seperti gambar', 'Menyimpan komponen', 'Menyimpan halaman', 'Menyimpan data server'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Next.js mendukung mode rendering?',
+      options: ['Static Generation, Server-side Rendering, dan Client-side Rendering', 'Static Generation saja', 'Server-side Rendering saja', 'Client-side Rendering saja'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Perintah untuk menjalankan project Next.js secara lokal adalah?',
+      options: ['npm run dev', 'npm start', 'npm build', 'npm test'],
+      correctIndex: 0,
+    ),
+    Question(
+      question: 'Next.js menyediakan fitur API routes untuk?',
+      options: ['Membuat API backend di dalam project', 'Mengatur routing halaman', 'Mengelola state', 'Menyimpan aset statis'],
+      correctIndex: 0,
+    ),
+  ],
+
   // Frameworks (contoh)
   'ALL FRAMEWORKS': [
     Question(
@@ -435,7 +597,10 @@ final Map<String, List<Question>> questionsByCategory = {
       options: ['runApp()', 'startApp()', 'initApp()', 'launchApp()'],
       correctIndex: 0,
     ),
+
+    
   ],
-  
-  // Anda bisa menambah kategori dan soalnya sesuai kebutuhan ...
+
+ 
 };
+  

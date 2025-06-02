@@ -1,12 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'quiz_data.dart'; 
+import 'quiz_data.dart';
 
 class QuizPages extends StatefulWidget {
   const QuizPages({Key? key, required this.category}) : super(key: key);
 
   final String category;
+
   @override
   _QuizPageState createState() => _QuizPageState();
 }
@@ -31,6 +31,7 @@ class _QuizPageState extends State<QuizPages> {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_timeRemaining <= 0) {
+        _showTimeUpMessage();
         _nextQuestion();
       } else {
         setState(() {
@@ -38,6 +39,18 @@ class _QuizPageState extends State<QuizPages> {
         });
       }
     });
+  }
+
+
+  
+
+  void _showTimeUpMessage() {
+    setState(() {
+      _score -= 10; // Mengurangi 10 poin saat waktu habis
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Anda kehilangan 10 poin')),
+    );
   }
 
   void _nextQuestion() {
@@ -60,8 +73,8 @@ class _QuizPageState extends State<QuizPages> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Skor Akhir'),
-        content: Text('Skor kamu: \$_score dari \${_questions.length * 10}'),
+        title: const Text('Skor Akhir', style: TextStyle(fontWeight: FontWeight.bold)),
+        content: Text('Skor kamu: $_score dari ${_questions.length * 10}'),
         actions: [
           TextButton(
             onPressed: () {
@@ -148,6 +161,13 @@ class _QuizPageState extends State<QuizPages> {
             color: isSelected ? Colors.blue : Colors.grey.shade400,
             width: isSelected ? 2 : 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 4,
+              offset: const Offset(2, 2),
+            ),
+          ],
         ),
         child: Text(
           option,
@@ -169,7 +189,7 @@ class _QuizPageState extends State<QuizPages> {
       return Scaffold(
         appBar: AppBar(
           title: Text('Quiz - ${widget.category}'),
-          backgroundColor: Colors.blue.shade900,
+          backgroundColor: const Color(0xFF1E3A8A),
         ),
         body: Center(
           child: Text('Belum ada soal untuk kategori ini',
@@ -184,7 +204,7 @@ class _QuizPageState extends State<QuizPages> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Quiz - ${widget.category}'),
-        backgroundColor: Colors.blue.shade900,
+        backgroundColor: const Color(0xFF1E3A8A),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(4),
           child: LinearProgressIndicator(
@@ -194,62 +214,64 @@ class _QuizPageState extends State<QuizPages> {
           ),
         ),
       ),
-      body: Padding(
+      body: Container(
+        color: const Color(0xFF1E3A8A), // Background color
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Timer and progress row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Pertanyaan \${_currentQuestionIndex + 1} / \${_questions.length}',
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                Row(
-                  children: [
-                    const Icon(Icons.timer, color: Colors.redAccent),
-                    const SizedBox(width: 4),
-                    Text(
-                      '\$_timeRemaining s',
-                      style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            // Question card
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              elevation: 8,
-              shadowColor: Colors.blue.shade100,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  question.question,
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Timer and progress row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Pertanyaan ${_currentQuestionIndex + 1} / ${_questions.length}',
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.timer, color: Colors.redAccent),
+                      const SizedBox(width: 4),
+                      Text(
+                        '$_timeRemaining s',
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              // Question card
+              Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                elevation: 8,
+                shadowColor: Colors.blue.shade100,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    question.question,
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            // Options list
-            Expanded(
-              child: ListView.builder(
-                itemCount: question.options.length,
-                itemBuilder: (context, index) {
-                  return _buildOption(index);
-                },
+              const SizedBox(height: 20),
+              // Options list
+              Expanded(
+                child: ListView.builder(
+                  itemCount: question.options.length,
+                  itemBuilder: (context, index) {
+                    return _buildOption(index);
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
-

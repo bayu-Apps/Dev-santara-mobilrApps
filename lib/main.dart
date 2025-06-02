@@ -1,6 +1,7 @@
 import 'package:dev_santara/cubit/page_cubit.dart';
 import 'package:dev_santara/page/home.dart';
 import 'package:dev_santara/page/main_page.dart';
+import 'package:dev_santara/page/materi_page/HTMLMateri.dart';
 import 'package:dev_santara/page/onboarding1.dart';
 import 'package:dev_santara/page/quiz_page.dart';
 import 'package:dev_santara/page/register.dart';
