@@ -1,11 +1,9 @@
+import 'package:dev_santara/services/auth_service.dart';
 import 'package:dev_santara/shared/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:dev_santara/services/auth_service.dart';
 
-
-
-class Register extends StatelessWidget {
-  const Register({super.key});
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,7 @@ class Register extends StatelessWidget {
 
               // Text
               Text(
-                "Mulailah perjalanan Anda dalam menguasai pemrograman hari ini — kapan saja, di mana saja.",
+                "Selamat datang! 🎉\nKami senang Anda di sini. Silakan masuk untuk melanjutkan.",
                 style: WhiteTextStyle.copyWith(
                   fontSize: 18,
                   fontWeight: medium,
@@ -45,25 +43,16 @@ class Register extends StatelessWidget {
               // Google Button
               ElevatedButton(
                 onPressed: () async {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (_) => Center(child: CircularProgressIndicator(color: Colors.white)),
-  );
+                final userCredential = await AuthService().signInWithGoogle();
 
-  final userCredential = await AuthService().signInWithGoogle();
-
-  Navigator.pop(context); 
-
-  if (userCredential != null) {
-    Navigator.pushReplacementNamed(context, '/home');
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Login Gagal!")),
-    );
-  }
-},
-
+                if (userCredential != null) {
+                  Navigator.pushReplacementNamed(context, '/home');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Login gagal! Coba lagi.")),
+                  );
+                }
+              },
 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xff1E3A8A),
@@ -87,7 +76,7 @@ class Register extends StatelessWidget {
                     ),
                     SizedBox(width: 12),
                     Text(
-                      'Sign Up Using Google Account',
+                     'Login with Google',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -140,7 +129,32 @@ class Register extends StatelessWidget {
 
               SizedBox(height: 30),
 
-             
+              // Login Text
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Sudah punya akun?',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, '/Login'); 
+                    },
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                       color: Color(0xFFFFD500),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

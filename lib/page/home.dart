@@ -3,8 +3,13 @@ import 'package:dev_santara/page/home/project/crudlaravel11.dart';
 import 'package:dev_santara/page/home/project/kalkulatorjs.dart';
 import 'package:dev_santara/page/home/project/kalkulatorpy.dart';
 import 'package:dev_santara/page/home/project/landingpage.dart';
+import 'package:dev_santara/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:dev_santara/shared/theme.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -322,43 +327,105 @@ class _HomeState extends State<Home> {
   }
 }
 
-class ProfilePanel extends StatelessWidget {
+
+class ProfilePanel extends StatefulWidget {
   const ProfilePanel({super.key});
+
+  @override
+  State<ProfilePanel> createState() => _ProfilePanelState();
+}
+
+class _ProfilePanelState extends State<ProfilePanel> {
+  final User? user = FirebaseAuth.instance.currentUser;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
+    await _googleSignIn.signOut();
+    await SharedPrefs.clearAll();
+  
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-          child: Column(
-            children: [
-              const CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.purpleAccent,
-                child: Icon(Icons.person, size: 50, color: Colors.white),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Bayu Trihardian Syah',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'bayurara555@gmail.com',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-              ),
-              const Divider(height: 40, thickness: 1),
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: () {
-                  // Tambahkan action logout jika perlu
-                },
-              ),
-            ],
-          ),
+      appBar: AppBar(
+       
+        title: const Text(
+          'Profile',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: user?.photoURL != null
+                  ? NetworkImage(user!.photoURL!)
+                  : null,
+              backgroundColor: Colors.blueAccent,
+              child: user?.photoURL == null
+                  ? const Icon(Icons.person, size: 50, color: Colors.white)
+                  : null,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              user?.displayName ?? 'Nama tidak tersedia',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              user?.email ?? 'Email tidak tersedia',
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 40),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+             onTap: () async {
+            final shouldLogout = await showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text("Konfirmasi Logout"),
+                  content: Text("Apakah Anda yakin ingin logout?"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(false); // Tidak logout
+                      },
+                      child: Text("Batal"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(true); // Lanjut logout
+                      },
+                      child: Text("Logout"),
+                    ),
+                  ],
+                );
+              },
+            );
+
+            // Jika user menekan 'Logout'
+            if (shouldLogout == true) {
+              await logout(); // fungsi logout kamu yang lengkap
+              if (context.mounted) {
+                Navigator.pushReplacementNamed(context, '/Register');
+              }
+            }
+          }
+
+
+
+
+
+            ),
+          ],
         ),
       ),
     );

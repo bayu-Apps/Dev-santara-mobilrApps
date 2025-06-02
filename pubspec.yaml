@@ -39,6 +39,10 @@ dependencies:
   flutter_bloc: ^9.0.0
   url_launcher: ^6.3.1
   flutter_launcher_icons: ^0.14.3
+  firebase_core: ^3.13.1
+  google_sign_in: ^6.1.5
+  firebase_auth: ^5.5.4
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
@@ -47,9 +51,8 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/LogoAplikasi.png"
-  adaptive_icon_foreground: "assets/LogoAplikasi.png"
-  adaptive_icon_background: "#00000000"
+  image_path: "assets/APK_Logo.png"
+  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -185,8 +185,7 @@ class Landingpage extends StatelessWidget {
         ),
       );
     }
-
-    return Scaffold(
+return Scaffold(
       backgroundColor: Color(0xff1E3A8A),
       body: SingleChildScrollView(
         child: Stack(
@@ -194,6 +193,22 @@ class Landingpage extends StatelessWidget {
             backgroundImage(),
             customShadow(),
             content(),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.transparent,
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              tooltip: 'Kembali',
+            ),
           ],
         ),
       ),

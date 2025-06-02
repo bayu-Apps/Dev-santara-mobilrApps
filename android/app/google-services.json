@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "32428613918",
+    "project_id": "dev-santara-c0bca",
+    "storage_bucket": "dev-santara-c0bca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32428613918:android:8d7a33fc2612e2f577290f",
+        "android_client_info": {
+          "package_name": "com.example.devsantara"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "32428613918-lkk1hsnujp0bp2p9k52gls77s796g4ej.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.devsantara",
+            "certificate_hash": "cd862e2ace784de1ec595c356c8df87b9280ba8b"
+          }
+        },
+        {
+          "client_id": "32428613918-djrc64hver9tcntn1551vqp5c8s08ifm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmEyvttMWFEpk9PJtjcfDdj1n_aHU2COE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "32428613918-djrc64hver9tcntn1551vqp5c8s08ifm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

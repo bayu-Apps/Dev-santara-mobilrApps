@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dev_santara/shared/theme.dart';
+import 'package:dev_santara/utils/shared_prefs.dart'; 
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -30,13 +31,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
     },
   ];
 
-  void _nextPage() {
-    if (_currentPage < _onboardingData.length - 1) {
-      _controller.nextPage(duration: Duration(milliseconds: 300), curve: Curves.ease);
-    } else {
-      Navigator.pushReplacementNamed(context, '/Register');
-    }
+  void _nextPage() async {
+  if (_currentPage < _onboardingData.length - 1) {
+    _controller.nextPage(duration: Duration(milliseconds: 300), curve: Curves.ease);
+  } else {
+    // Tandai onboarding sudah selesai
+    await SharedPrefs.setOnboardingSeen();
+    
+    // Arahkan ke halaman berikutnya
+    Navigator.pushReplacementNamed(context, '/Register'); // atau '/Login' jika kamu ingin langsung login
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

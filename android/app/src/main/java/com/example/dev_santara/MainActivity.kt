@@ -1,4 +1,4 @@
-package com.example.dev_santara
+package com.example.devsantara
 
 import io.flutter.embedding.android.FlutterActivity
 

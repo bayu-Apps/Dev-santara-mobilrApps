@@ -160,6 +160,22 @@ class Kalkulatorjs extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: Container(
+        color: Colors.transparent,
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              tooltip: 'Kembali',
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
