@@ -166,11 +166,11 @@ class _HomeState extends State<Home> {
         child: Stack(
           children: [
             SafeArea(
-              child: SingleChildScrollView(
+              child: SingleChildScrollView( 
                 child: Container(
                   width: double.infinity,
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 35),
+                      const EdgeInsets.only(top: 25, bottom: 100, left: 30, right: 30,),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -235,11 +235,11 @@ class _HomeState extends State<Home> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Jika dalam mode search, sembunyikan banner & bahasa & judul section
+                    
                       if (!inSearchMode) ...[
                         // BANNER
                         SizedBox(
-                          height: 150,
+                          height: 200,
                           child: Stack(
                             alignment: Alignment.bottomCenter,
                             children: [

@@ -18,66 +18,11 @@ class QuizPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff1E3A8A),
-      body: Stack(
+      body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 80), 
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(25, 0, 25, 100),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  
-                  Text(
-                    'Quiz Bahasa Pemrograman',
-                    style: WhiteTextStyle.copyWith(
-                      fontSize: 18,
-                      fontWeight: medium,
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-
-                  Column(
-                    children: [
-                      _buildQuizCard(context, 'HTML', 'assets/icon/html.png'),
-                      _buildQuizCard(context, 'CSS', 'assets/icon/css.png'),
-                      _buildQuizCard(context, 'JAVASCRIPT', 'assets/icon/js_icon.png'),
-                      _buildQuizCard(context, 'PHP', 'assets/icon/php_icon.png'),
-                      _buildQuizCard(context, 'PYTHON', 'assets/icon/python_icon.png'),
-                    ],
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Section: Quiz Frameworks
-                  Text(
-                    'Quiz Frameworks',
-                    style: WhiteTextStyle.copyWith(
-                      fontSize: 18,
-                      fontWeight: medium,
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-
-                  Column(
-                    children: [
-                      _buildQuizCard(context, 'ALL FRAMEWORKS', 'assets/icon/allframeworks.png'),
-                      _buildQuizCard(context, 'TAILWIND CSS', 'assets/icon/tailwind.png'),
-                      _buildQuizCard(context, 'FLUTTER', 'assets/icon/flutter.png'),
-                      _buildQuizCard(context, 'LARAVEL', 'assets/icon/laravel.png'),
-                      _buildQuizCard(context, 'REACT', 'assets/icon/reactjs.png'),
-                      _buildQuizCard(context, 'NEXT JS', 'assets/icon/nectjs.png'),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-        
+          // Header (tetap fixed di atas)
           Container(
-            height: 70,
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsets.only(top: 50, bottom: 10, left: 25, right: 25,),
             color: const Color(0xff1E3A8A),
             alignment: Alignment.centerLeft,
             child: Row(
@@ -94,6 +39,58 @@ class QuizPage extends StatelessWidget {
               ],
             ),
           ),
+
+         Expanded(
+  child: SingleChildScrollView(
+    padding: const EdgeInsets.fromLTRB(25, 20, 25, 100),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Quiz Bahasa Pemrograman',
+          style: WhiteTextStyle.copyWith(
+            fontSize: 18,
+            fontWeight: medium,
+          ),
+        ),
+        const SizedBox(height: 5), 
+
+        Column(
+          children: [
+            _buildQuizCard(context, 'HTML', 'assets/icon/html.png'),
+            _buildQuizCard(context, 'CSS', 'assets/icon/css.png'),
+            _buildQuizCard(context, 'JAVASCRIPT', 'assets/icon/js_icon.png'),
+            _buildQuizCard(context, 'PHP', 'assets/icon/php_icon.png'),
+            _buildQuizCard(context, 'PYTHON', 'assets/icon/python_icon.png'),
+          ],
+        ),
+
+        const SizedBox(height: 15), // antar bagian bahasa dan frameworks
+
+        Text(
+          'Quiz Frameworks',
+          style: WhiteTextStyle.copyWith(
+            fontSize: 18,
+            fontWeight: medium,
+          ),
+        ),
+        const SizedBox(height: 10), // jarak antarjudul dan konten dikurangi
+
+        Column(
+          children: [
+            _buildQuizCard(context, 'ALL FRAMEWORKS', 'assets/icon/allframeworks.png'),
+            _buildQuizCard(context, 'TAILWIND CSS', 'assets/icon/tailwind.png'),
+            _buildQuizCard(context, 'FLUTTER', 'assets/icon/flutter.png'),
+            _buildQuizCard(context, 'LARAVEL', 'assets/icon/laravel.png'),
+            _buildQuizCard(context, 'REACT', 'assets/icon/reactjs.png'),
+            _buildQuizCard(context, 'NEXT JS', 'assets/icon/nectjs.png'),
+          ],
+        ),
+      ],
+    ),
+  ),
+)
+
         ],
       ),
     );
