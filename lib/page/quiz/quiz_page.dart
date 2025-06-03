@@ -18,6 +18,7 @@ class _QuizPageState extends State<QuizPages> {
   int _timeRemaining = 15;
   Timer? _timer;
   bool _answered = false;
+  int? _selectedOptionIndex;
 
   @override
   void initState() {
@@ -40,9 +41,6 @@ class _QuizPageState extends State<QuizPages> {
       }
     });
   }
-
-
-  
 
   void _showTimeUpMessage() {
     setState(() {
@@ -78,16 +76,18 @@ class _QuizPageState extends State<QuizPages> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(); // Tutup dialog
               _resetQuiz();
             },
             child: const Text('Ulangi'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
+             
+              Navigator.of(context).pop(); 
+              Navigator.of(context).pop(true);
             },
+            
             child: const Text('Keluar'),
           ),
         ],
@@ -105,8 +105,6 @@ class _QuizPageState extends State<QuizPages> {
     });
     _startTimer();
   }
-
-  int? _selectedOptionIndex;
 
   void _selectOption(int index) {
     if (_answered) return;
@@ -137,17 +135,16 @@ class _QuizPageState extends State<QuizPages> {
 
     Color? optionColor;
 
-    if (_answered) {
-      if (index == correctIndex) {
+      if (_answered) {
+      if (index == correctIndex && _selectedOptionIndex != null) {
         optionColor = Colors.greenAccent.shade700;
       } else if (isSelected && index != correctIndex) {
         optionColor = Colors.redAccent.shade700;
       } else {
         optionColor = Colors.grey.shade200;
       }
-    } else {
-      optionColor = Colors.grey.shade200;
     }
+
 
     return GestureDetector(
       onTap: () => _selectOption(index),
@@ -215,7 +212,7 @@ class _QuizPageState extends State<QuizPages> {
         ),
       ),
       body: Container(
-        color: const Color(0xFF1E3A8A), // Background color
+        color: const Color(0xFF1E3A8A),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Center(
           child: Column(

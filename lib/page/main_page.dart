@@ -14,7 +14,7 @@ class MainPage extends StatelessWidget {
       case 0:
         return const Home();
       case 1:
-        return const QuizPage();
+        return QuizPage();
       default:
         return const Home();
     }
