@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:dev_santara/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'quiz_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuizPages extends StatefulWidget {
   const QuizPages({Key? key, required this.category}) : super(key: key);
@@ -19,6 +22,9 @@ class _QuizPageState extends State<QuizPages> {
   Timer? _timer;
   bool _answered = false;
   int? _selectedOptionIndex;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -44,7 +50,7 @@ class _QuizPageState extends State<QuizPages> {
 
   void _showTimeUpMessage() {
     setState(() {
-      _score -= 10; // Mengurangi 10 poin saat waktu habis
+      _score -= 10; 
     });
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Anda kehilangan 10 poin')),
@@ -71,23 +77,50 @@ class _QuizPageState extends State<QuizPages> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Skor Akhir', style: TextStyle(fontWeight: FontWeight.bold)),
-        content: Text('Skor kamu: $_score dari ${_questions.length * 10}'),
+        backgroundColor: const Color(0xFF1E3A8A), // Warna latar belakang sesuai tema
+        title: const Text(
+          'Skor Akhir',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          'Skor kamu: $_score dari ${_questions.length * 10}',
+          style: const TextStyle(color: Colors.white70),
+        ),
         actions: [
-          TextButton(
-            onPressed: () {
+          ElevatedButton(
+            onPressed: () async {
+              final userId = _auth.currentUser !.uid;
+              await _firestore.collection('quiz_progress').doc(userId).set({
+                widget.category: {
+                  'completed': true,
+                  'score': _score,
+                },
+              }, SetOptions(merge: true));
               Navigator.of(context).pop(); // Tutup dialog
-              _resetQuiz();
+              _resetQuiz(); // Reset quiz
             },
+            style: ElevatedButton.styleFrom(
+              iconColor: Colors.blueAccent, // Warna tombol ulangi
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
             child: const Text('Ulangi'),
           ),
-          TextButton(
+          ElevatedButton(
             onPressed: () {
-             
               Navigator.of(context).pop(); 
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pop(_score); 
             },
-            
+            style: ElevatedButton.styleFrom(
+              iconColor: Colors.redAccent.shade400, // Warna tombol keluar
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
             child: const Text('Keluar'),
           ),
         ],
@@ -135,16 +168,15 @@ class _QuizPageState extends State<QuizPages> {
 
     Color? optionColor;
 
-      if (_answered) {
+    if (_answered) {
       if (index == correctIndex && _selectedOptionIndex != null) {
         optionColor = Colors.greenAccent.shade700;
       } else if (isSelected && index != correctIndex) {
         optionColor = Colors.redAccent.shade700;
       } else {
-        optionColor = Colors.grey.shade200;
+        optionColor = const Color.fromARGB(255, 88, 103, 193);
       }
     }
-
 
     return GestureDetector(
       onTap: () => _selectOption(index),
@@ -172,7 +204,7 @@ class _QuizPageState extends State<QuizPages> {
             fontSize: 18,
             color: _answered && optionColor == Colors.redAccent.shade700
                 ? Colors.white
-                : Colors.black87,
+                : const Color.fromARGB(221, 255, 255, 255),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -200,14 +232,17 @@ class _QuizPageState extends State<QuizPages> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz - ${widget.category}'),
+        foregroundColor: Color(0xffffffff),
+        title: Text('Quiz - ${widget.category}',
+        style: WhiteTextStyle,
+        ),
         backgroundColor: const Color(0xFF1E3A8A),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(4),
           child: LinearProgressIndicator(
             value: progress,
             backgroundColor: Colors.grey.shade300,
-            color: Colors.blueAccent,
+            color: const Color.fromARGB(255, 255, 255, 255),
           ),
         ),
       ),

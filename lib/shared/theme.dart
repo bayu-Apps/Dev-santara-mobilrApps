@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+const KprimaryColor = Color(0xFF1E3A8A); // biru gelap
+
+
 double DefaultMargin = 24.0;
 double DefaultRadius = 17.0;
 

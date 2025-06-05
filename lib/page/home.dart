@@ -22,7 +22,8 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home>
+    with AutomaticKeepAliveClientMixin { // ← Tambahkan mixin di sini
   final PageController _pageController = PageController();
   final User? user = FirebaseAuth.instance.currentUser;
 
@@ -36,7 +37,7 @@ class _HomeState extends State<Home> {
     'assets/slider3.jpg',
   ];
 
-  // Daftar bahasa pemrograman dan navigasi terkait
+  
   final List<Map<String, dynamic>> _languages = [
     {
       'title': 'HTML',
@@ -92,7 +93,6 @@ class _HomeState extends State<Home> {
     },
   ];
 
-  // List hasil filter untuk bahasa & project
   List<Map<String, dynamic>> _filteredLanguages = [];
   List<Map<String, dynamic>> _filteredProjects = [];
 
@@ -113,7 +113,7 @@ class _HomeState extends State<Home> {
   }
 
   void _startAutoScroll() {
-    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (_currentPage < _bannerImages.length - 1) {
         _currentPage++;
       } else {
@@ -135,10 +135,16 @@ class _HomeState extends State<Home> {
         _filteredLanguages = _languages;
       } else {
         _filteredProjects = _projectList.where((project) {
-          return project['title'].toString().toLowerCase().contains(_searchQuery.toLowerCase());
+          return project['title']
+              .toString()
+              .toLowerCase()
+              .contains(_searchQuery.toLowerCase());
         }).toList();
         _filteredLanguages = _languages.where((lang) {
-          return lang['title'].toString().toLowerCase().contains(_searchQuery.toLowerCase());
+          return lang['title']
+              .toString()
+              .toLowerCase()
+              .contains(_searchQuery.toLowerCase());
         }).toList();
       }
     });
@@ -146,6 +152,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); 
     final bool inSearchMode = _searchQuery.isNotEmpty;
 
     return Scaffold(
@@ -166,11 +173,15 @@ class _HomeState extends State<Home> {
         child: Stack(
           children: [
             SafeArea(
-              child: SingleChildScrollView( 
+              child: SingleChildScrollView(
                 child: Container(
                   width: double.infinity,
-                  margin:
-                      const EdgeInsets.only(top: 25, bottom: 100, left: 30, right: 30,),
+                  margin: const EdgeInsets.only(
+                    top: 25,
+                    bottom: 30,
+                    left: 30,
+                    right: 30,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -180,8 +191,8 @@ class _HomeState extends State<Home> {
                         children: [
                           Expanded(
                             child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12),
                               height: 50,
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -201,11 +212,14 @@ class _HomeState extends State<Home> {
                                         _searchItems(value);
                                       },
                                       decoration: InputDecoration(
-                                        hintText: 'Cari proyek atau bahasa pemrograman...',
-                                        hintStyle: TextStyle(color: Colors.grey),
+                                        hintText:
+                                            'Cari proyek atau bahasa pemrograman...',
+                                        hintStyle:
+                                            const TextStyle(color: Colors.grey),
                                         border: InputBorder.none,
                                       ),
-                                      style: const TextStyle(color: Colors.black),
+                                      style: const TextStyle(
+                                          color: Colors.black),
                                     ),
                                   ),
                                 ],
@@ -226,8 +240,11 @@ class _HomeState extends State<Home> {
                                   : null,
                               backgroundColor: Colors.blueAccent,
                               child: user?.photoURL == null
-                                  ? const Icon(Icons.person,
-                                      size: 24, color: Colors.white)
+                                  ? const Icon(
+                                      Icons.person,
+                                      size: 24,
+                                      color: Colors.white,
+                                    )
                                   : null,
                             ),
                           ),
@@ -235,7 +252,6 @@ class _HomeState extends State<Home> {
                       ),
                       const SizedBox(height: 20),
 
-                    
                       if (!inSearchMode) ...[
                         // BANNER
                         SizedBox(
@@ -268,8 +284,8 @@ class _HomeState extends State<Home> {
                                   children: List.generate(
                                       _bannerImages.length, (index) {
                                     return AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 400),
+                                      duration: const Duration(
+                                          milliseconds: 400),
                                       margin: const EdgeInsets.symmetric(
                                           horizontal: 4),
                                       width: _currentPage == index ? 16 : 8,
@@ -278,7 +294,8 @@ class _HomeState extends State<Home> {
                                         color: _currentPage == index
                                             ? Colors.white
                                             : Colors.white54,
-                                        borderRadius: BorderRadius.circular(4),
+                                        borderRadius:
+                                            BorderRadius.circular(4),
                                       ),
                                     );
                                   }),
@@ -295,18 +312,22 @@ class _HomeState extends State<Home> {
                           child: Row(
                             children: _languages.map((lang) {
                               final isHtml = lang['title'] == 'HTML';
-                              final imageSize = isHtml ? 70.0 : 65.0;
+                              final imageSize =
+                                  isHtml ? 70.0 : 65.0;
 
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              lang['page']()));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          lang['page'](),
+                                    ),
+                                  );
                                 },
                                 child: Container(
-                                  margin: const EdgeInsets.only(right: 20),
+                                  margin:
+                                      const EdgeInsets.only(right: 20),
                                   child: Column(
                                     children: [
                                       const SizedBox(height: 10),
@@ -322,9 +343,10 @@ class _HomeState extends State<Home> {
                                       Text(
                                         lang['title'],
                                         style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: medium),
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: medium,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -339,7 +361,9 @@ class _HomeState extends State<Home> {
                         Text(
                           'Belajar dengan project',
                           style: WhiteTextStyle.copyWith(
-                              fontSize: 18, fontWeight: medium),
+                            fontSize: 18,
+                            fontWeight: medium,
+                          ),
                         ),
                         const SizedBox(height: 15),
                       ],
@@ -350,19 +374,25 @@ class _HomeState extends State<Home> {
                           Text(
                             'Bahasa Pemrograman',
                             style: WhiteTextStyle.copyWith(
-                                fontSize: 18, fontWeight: medium),
+                              fontSize: 18,
+                              fontWeight: medium,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           Column(
                             children: _filteredLanguages.map((lang) {
                               return Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
+                                padding:
+                                    const EdgeInsets.only(bottom: 10),
                                 child: GestureDetector(
                                   onTap: () {
                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => lang['page']()));
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            lang['page'](),
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     width: double.infinity,
@@ -370,12 +400,14 @@ class _HomeState extends State<Home> {
                                     padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius:
+                                          BorderRadius.circular(15),
                                     ),
                                     child: Row(
                                       children: [
                                         ClipRRect(
-                                          borderRadius: BorderRadius.circular(15),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
                                           child: Image.asset(
                                             lang['iconPath'],
                                             width: 70,
@@ -387,8 +419,9 @@ class _HomeState extends State<Home> {
                                         Expanded(
                                           child: Text(
                                             lang['title'],
-                                            style:
-                                                BlackTextStyle.copyWith(fontSize: 18),
+                                            style: BlackTextStyle.copyWith(
+                                              fontSize: 18,
+                                            ),
                                           ),
                                         )
                                       ],
@@ -406,13 +439,16 @@ class _HomeState extends State<Home> {
                           Text(
                             'Project',
                             style: WhiteTextStyle.copyWith(
-                                fontSize: 18, fontWeight: medium),
+                              fontSize: 18,
+                              fontWeight: medium,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           Column(
                             children: _filteredProjects.map((project) {
                               return Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
+                                padding:
+                                    const EdgeInsets.only(bottom: 10),
                                 child: _buildProjectCard(
                                   project['image'],
                                   project['title'],
@@ -424,24 +460,29 @@ class _HomeState extends State<Home> {
                           ),
                         ],
 
-                        // Jika tidak ada hasil sama sekali
-                        if (_filteredLanguages.isEmpty && _filteredProjects.isEmpty) ...[
+                       
+                        if (_filteredLanguages.isEmpty &&
+                            _filteredProjects.isEmpty) ...[
                           Center(
                             child: Text(
                               'Tidak ada hasil pencarian',
-                              style: WhiteTextStyle.copyWith(fontSize: 16),
+                              style: WhiteTextStyle.copyWith(
+                                  fontSize: 16),
                             ),
                           ),
                           const SizedBox(height: 20),
                         ],
                       ],
 
-                      // Jika tidak dalam mode pencarian, tampilkan daftar project seperti semula
+
+
+                      //Project materi
                       if (!inSearchMode)
                         Column(
                           children: _filteredProjects.map((project) {
                             return Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
+                              padding:
+                                  const EdgeInsets.only(bottom: 10),
                               child: _buildProjectCard(
                                 project['image'],
                                 project['title'],
@@ -464,15 +505,19 @@ class _HomeState extends State<Home> {
                 top: MediaQuery.of(context).size.height / 2 - 20,
                 child: const Opacity(
                   opacity: 1,
-                  child:
-                      Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 24),
+                  child: Icon(
+                    Icons.arrow_back_ios_new,
+                    color: Colors.white,
+                    size: 24,
+                  ),
                 ),
               ),
 
             // PROFILE PANEL
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
-              right: showProfile ? 0 : -MediaQuery.of(context).size.width * 0.75,
+              right:
+                  showProfile ? 0 : -MediaQuery.of(context).size.width * 0.75,
               top: 0,
               bottom: 0,
               width: MediaQuery.of(context).size.width * 0.75,
@@ -485,7 +530,11 @@ class _HomeState extends State<Home> {
   }
 
   Widget _buildProjectCard(
-      String imagePath, String title, String description, Widget page) {
+    String imagePath,
+    String title,
+    String description,
+    Widget page,
+  ) {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) => page));
@@ -494,8 +543,10 @@ class _HomeState extends State<Home> {
         width: double.infinity,
         height: 70,
         padding: const EdgeInsets.all(10),
-        decoration:
-            BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
         child: Row(
           children: [
             ClipRRect(
@@ -510,7 +561,8 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(title, style: BlackTextStyle.copyWith(fontSize: 18)),
-                  Text(description, style: greyTextStyle.copyWith(fontSize: 14)),
+                  Text(description,
+                      style: greyTextStyle.copyWith(fontSize: 14)),
                 ],
               ),
             ),
@@ -520,32 +572,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildLanguageItem(String title, String iconPath, VoidCallback onTap) {
-    final isHtml = title == 'HTML';
-    final imageSize = isHtml ? 70.0 : 65.0;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(right: 20),
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            SizedBox(
-              width: imageSize,
-              height: imageSize,
-              child: Image.asset(iconPath, fit: BoxFit.contain),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: medium),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  @override
+  bool get wantKeepAlive => true; // ← Menjaga agar state tidak di-dispose
 }
 
 class ProfilePanel extends StatefulWidget {
@@ -567,78 +595,162 @@ class _ProfilePanelState extends State<ProfilePanel> {
 
   @override
   Widget build(BuildContext context) {
+    final themeColor = const Color(0xFF1E3A8A); // Deep blue as Home background
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: user?.photoURL != null
-                  ? NetworkImage(user!.photoURL!)
-                  : null,
-              backgroundColor: Colors.blueAccent,
-              child: user?.photoURL == null
-                  ? const Icon(Icons.person, size: 50, color: Colors.white)
-                  : null,
-            ),
-            const SizedBox(height: 20),
-            Text(
-              user?.displayName ?? 'Nama tidak tersedia',
-              style: const TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              user?.email ?? 'Email tidak tersedia',
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-            const SizedBox(height: 40),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () async {
-                final shouldLogout = await showDialog<bool>(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text("Konfirmasi Logout"),
-                      content: const Text("Apakah Anda yakin ingin logout?"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(false); // Tidak logout
-                          },
-                          child: const Text("Batal"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(true); // Lanjut logout
-                          },
-                          child: const Text("Logout"),
-                        ),
-                      ],
-                    );
-                  },
-                );
+      backgroundColor: themeColor.withOpacity(0.95),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Small drag handle for UX
+              Container(
+                width: 40,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Colors.white54,
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+              const SizedBox(height: 30),
 
-                if (shouldLogout == true) {
-                  await logout();
-                  if (context.mounted) {
-                    Navigator.pushReplacementNamed(context, '/Register');
-                  }
-                }
-              },
+              // Avatar with colored ring
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 4,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 8,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: CircleAvatar(
+                  radius: 52,
+                  backgroundColor: Colors.blueAccent,
+                  backgroundImage: user?.photoURL != null
+                      ? NetworkImage(user!.photoURL!)
+                      : null,
+                  child: user?.photoURL == null
+                      ? const Icon(Icons.person, size: 52, color: Colors.white)
+                      : null,
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              Text(
+                user?.displayName ?? 'Nama tidak tersedia',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 24,
+                  letterSpacing: 0.5,
+                ),
+                textAlign: TextAlign.center,
+              ),
+
+              const SizedBox(height: 8),
+
+              Text(
+                user?.email ?? 'Email tidak tersedia',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.center,
+              ),
+
+              const Spacer(),
+// Logout button
+SizedBox(
+  width: double.infinity,
+  child: ElevatedButton.icon(
+    icon: const Icon(
+      Icons.logout,
+      color: Colors.white,
+      size: 22,
+    ),
+    label: const Text(
+      'Logout',
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.5,
+      ),
+    ),
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.redAccent.shade400,
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 6,
+      shadowColor: Colors.redAccent.shade200,
+    ),
+    onPressed: () async {
+      final shouldLogout = await showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: const Color(0xFF1E3A8A), // Warna latar belakang sesuai tema
+            title: const Text(
+              "Konfirmasi Logout",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ],
+            content: const Text(
+              "Apakah Anda yakin ingin logout?",
+              style: TextStyle(color: Colors.white70),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: const Text(
+                  "Batal",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                style: ElevatedButton.styleFrom(
+                  iconColor: Colors.redAccent.shade400, // Warna tombol logout
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text("Logout"),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (shouldLogout == true) {
+        await logout();
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(context, '/Register');
+        }
+      }
+    },
+  ),
+),
+            ],
+          ),
         ),
       ),
     );

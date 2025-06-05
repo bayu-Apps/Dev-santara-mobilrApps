@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +12,11 @@ class QuizPage extends StatefulWidget {
   @override
   State<QuizPage> createState() => _QuizPageState();
 }
-
 class _QuizPageState extends State<QuizPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Map<String, bool> _completedQuizzes = {};
-
+  // Daftar quiz tetap dua list
   final List<Map<String, String>> programmingQuizzes = [
     {'title': 'HTML', 'icon': 'assets/icon/html.png'},
     {'title': 'CSS', 'icon': 'assets/icon/css.png'},
@@ -24,7 +24,6 @@ class _QuizPageState extends State<QuizPage> {
     {'title': 'PHP', 'icon': 'assets/icon/php_icon.png'},
     {'title': 'PYTHON', 'icon': 'assets/icon/python_icon.png'},
   ];
-
   final List<Map<String, String>> frameworkQuizzes = [
     {'title': 'ALL FRAMEWORKS', 'icon': 'assets/icon/allframeworks.png'},
     {'title': 'TAILWIND CSS', 'icon': 'assets/icon/tailwind.png'},
@@ -34,52 +33,101 @@ class _QuizPageState extends State<QuizPage> {
     {'title': 'NEXT JS', 'icon': 'assets/icon/nectjs.png'},
   ];
 
+  Map<String, Map<String, dynamic>> _completedQuizzes = {};
+  StreamSubscription<DocumentSnapshot>? _quizProgressSubscription;
+
   @override
   void initState() {
     super.initState();
-    _ensureUser();
+    _ensureUserAndListen();
   }
 
-  Future<void> _ensureUser() async {
+  @override
+  void dispose() {
+    // Pastikan listener dibatalkan saat widget di‐dispose
+    _quizProgressSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _ensureUserAndListen() async {
+    // 1) Pastikan user signed‐in
     if (_auth.currentUser == null) {
       await _auth.signInAnonymously();
     }
-    _loadCompletedQuizzes();
-  }
 
-  Future<void> _loadCompletedQuizzes() async {
     final userId = _auth.currentUser!.uid;
-    final doc = await _firestore.collection('quiz_progress').doc(userId).get();
-    final data = doc.data() ?? {};
+    final docRef = _firestore.collection('quiz_progress').doc(userId);
 
-    setState(() {
-      for (var quiz in [...programmingQuizzes, ...frameworkQuizzes]) {
+    // 2) Daftarkan listener real‐time
+    _quizProgressSubscription = docRef.snapshots().listen((snapshot) {
+      final data = snapshot.data() ?? {};
+      final Map<String, Map<String, dynamic>> temp = {};
+
+      // Parsing programmingQuizzes
+      for (var quiz in programmingQuizzes) {
         final title = quiz['title']!;
-        _completedQuizzes[title] = data[title] == true;
+        final quizData = data[title];
+        if (quizData is Map<String, dynamic>) {
+          temp[title] = {
+            'completed': quizData['completed'] == true,
+            'score': quizData['score'] ?? 0,
+          };
+        } else {
+          temp[title] = {
+            'completed': false,
+            'score': 0,
+          };
+        }
       }
+
+      // Parsing frameworkQuizzes
+      for (var quiz in frameworkQuizzes) {
+        final title = quiz['title']!;
+        final quizData = data[title];
+        if (quizData is Map<String, dynamic>) {
+          temp[title] = {
+            'completed': quizData['completed'] == true,
+            'score': quizData['score'] ?? 0,
+          };
+        } else {
+          temp[title] = {
+            'completed': false,
+            'score': 0,
+          };
+        }
+      }
+
+      // 3) Update state ketika ada data baru
+      setState(() {
+        _completedQuizzes = temp;
+      });
     });
   }
 
-  Future<void> _markQuizAsCompleted(String quizTitle) async {
+  Future<void> _markQuizAsCompleted(String quizTitle, int score) async {
     final userId = _auth.currentUser!.uid;
     await _firestore.collection('quiz_progress').doc(userId).set({
-      quizTitle: true,
+      quizTitle: {
+        'completed': true,
+        'score': score,
+      },
     }, SetOptions(merge: true));
-
-    setState(() {
-      _completedQuizzes[quizTitle] = true;
-    });
+    // Tidak perlu setState di sini untuk skor, karena listener akan otomatis memicu setState
   }
 
   void _openQuiz(BuildContext context, String category) async {
-    await Navigator.push(
+    final int? score = await Navigator.push<int>(
       context,
       MaterialPageRoute(
         builder: (context) => QuizPages(category: category),
       ),
     );
 
-    await _markQuizAsCompleted(category);
+    if (score != null) {
+      await _markQuizAsCompleted(category, score);
+      // Tidak perlu memanggil _loadCompletedQuizzes() ataupun setState di sini.
+      // Karena listener sudah memantau dokumen Firestore secara real‐time.
+    }
   }
 
   @override
@@ -89,7 +137,7 @@ class _QuizPageState extends State<QuizPage> {
       body: Column(
         children: [
           Container(
-            padding: const EdgeInsets.only(top: 30, bottom: 10, left: 25, right: 25),
+            padding: const EdgeInsets.only(top: 50, bottom: 10, left: 25, right: 25),
             color: const Color(0xff1E3A8A),
             alignment: Alignment.centerLeft,
             child: Row(
@@ -119,11 +167,12 @@ class _QuizPageState extends State<QuizPage> {
                   const SizedBox(height: 5),
                   Column(
                     children: programmingQuizzes.map((quiz) {
+                      final quizData = _completedQuizzes[quiz['title']] ?? {'completed': false, 'score': 0};
                       return _buildQuizCard(
                         context,
                         quiz['title']!,
                         quiz['icon']!,
-                        _completedQuizzes[quiz['title']] ?? false,
+                        quizData,
                       );
                     }).toList(),
                   ),
@@ -135,11 +184,12 @@ class _QuizPageState extends State<QuizPage> {
                   const SizedBox(height: 10),
                   Column(
                     children: frameworkQuizzes.map((quiz) {
+                      final quizData = _completedQuizzes[quiz['title']] ?? {'completed': false, 'score': 0};
                       return _buildQuizCard(
                         context,
                         quiz['title']!,
                         quiz['icon']!,
-                        _completedQuizzes[quiz['title']] ?? false,
+                        quizData,
                       );
                     }).toList(),
                   ),
@@ -152,7 +202,20 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  Widget _buildQuizCard(BuildContext context, String title, String iconPath, bool isCompleted) {
+  Widget _buildQuizCard(
+      BuildContext context, String title, String iconPath, Map<String, dynamic> quizData) {
+    final bool isCompleted = quizData['completed'] ?? false;
+    final int score = quizData['score'] ?? 0;
+    Color checkColor;
+
+    if (score >= 70) {
+      checkColor = Colors.green;
+    } else if (score >= 40) {
+      checkColor = Colors.yellow;
+    } else {
+      checkColor = Colors.red;
+    }
+
     return GestureDetector(
       onTap: () => _openQuiz(context, title),
       child: Container(
@@ -178,7 +241,20 @@ class _QuizPageState extends State<QuizPage> {
               ),
             ),
             if (isCompleted)
-              const Icon(Icons.check_circle, color: Colors.green, size: 30),
+              Row(
+                children: [
+                   Text(
+                    '$score / 100',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(Icons.check_circle, color: checkColor, size: 30),
+                 
+                ],
+              ),
           ],
         ),
       ),
